@@ -1,0 +1,24 @@
+{
+  "name": "forkify",
+  "version": "1.0.0",
+  "description": "recipe app",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gdevgproject/forkify.git"
+  },
+  "author": "gdev.gproject - vuducminh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gdevgproject/forkify/issues"
+  },
+  "homepage": "https://github.com/gdevgproject/forkify#readme",
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.13.2",
+    "parcel": "^2.13.2"
+  }
+}
