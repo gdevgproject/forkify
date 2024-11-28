@@ -14,7 +14,7 @@ export const getJSON = async function (url) {
     const data = await res.json();
     if (!res.ok)
       throw new Error(
-        `Failed to fetch: ${data.message} (${res.statusText}  ${res.status})`
+        `Failed to fetch: ${data.message} (${res.statusText}  ${res.status} 🧨)`
       );
     return data;
   } catch (err) {
