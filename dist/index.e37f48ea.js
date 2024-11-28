@@ -612,13 +612,13 @@ const controlRecipes = async function() {
         // 2. Rendering recipe
         (0, _recipeViewJsDefault.default).render(_modelJs.state.recipe);
     } catch (err) {
-        alert(` ${err.message}`);
+        console.log(` ${err.message}`);
     }
 };
-[
-    'hashchange',
-    'load'
-].forEach((ev)=>window.addEventListener(ev, controlRecipes));
+const init = function() {
+    (0, _recipeViewJsDefault.default).addHandlerRender(controlRecipes);
+};
+init();
 
 },{"./model.js":"Y4A21","./views/recipeView.js":"l60JC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"Y4A21":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -651,7 +651,7 @@ const loadRecipe = async function(id) {
     }
 };
 
-},{"./config.js":"k5Hzs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/helpers.js":"YS2Ox"}],"k5Hzs":[function(require,module,exports,__globalThis) {
+},{"./config.js":"k5Hzs","./views/helpers.js":"YS2Ox","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"k5Hzs":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "API_URL", ()=>API_URL);
@@ -715,7 +715,7 @@ const getJSON = async function(url) {
     }
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../config.js":"k5Hzs"}],"l60JC":[function(require,module,exports,__globalThis) {
+},{"../config.js":"k5Hzs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"l60JC":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _iconsSvg = require("url:../../img/icons.svg");
@@ -743,6 +743,12 @@ class RecipeView {
         this.#clear();
         this.#parentElement.insertAdjacentHTML('afterbegin', markup);
     };
+    addHandlerRender(handler) {
+        [
+            'hashchange',
+            'load'
+        ].forEach((ev)=>window.addEventListener(ev, handler));
+    }
     #generateMarkup() {
         return `
     <figure class="recipe__fig">
