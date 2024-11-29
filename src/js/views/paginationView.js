@@ -1,5 +1,5 @@
 import View from './View.js';
-import icons from 'url:../../img/icons.svg';
+import icons from 'url:../../img/icons.svg'; // Parcel 2
 
 class PaginationView extends View {
   _parentElement = document.querySelector('.pagination');
@@ -30,7 +30,8 @@ class PaginationView extends View {
           <svg class="search__icon">
             <use href="${icons}#icon-arrow-right"></use>
           </svg>
-        </button>`;
+        </button>
+      `;
     }
 
     // Last page
@@ -43,10 +44,11 @@ class PaginationView extends View {
             <use href="${icons}#icon-arrow-left"></use>
           </svg>
           <span>Page ${curPage - 1}</span>
-        </button>`;
+        </button>
+      `;
     }
 
-    // Other pages
+    // Other page
     if (curPage < numPages) {
       return `
         <button data-goto="${
@@ -64,7 +66,8 @@ class PaginationView extends View {
           <svg class="search__icon">
             <use href="${icons}#icon-arrow-right"></use>
           </svg>
-        </button>`;
+        </button>
+      `;
     }
 
     // Page 1, and there are NO other pages
