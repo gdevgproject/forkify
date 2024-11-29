@@ -1,8 +1,8 @@
 import * as model from './model.js';
 import recipeView from './views/recipeView.js';
 import searchView from './views/searchView.js';
-import recipeView from './views/recipeView.js';
 import resultsView from './views/resultsView.js';
+import paginationView from './views/paginationView.js';
 
 const controlRecipes = async function () {
   try {
@@ -18,7 +18,6 @@ const controlRecipes = async function () {
     // 2. Rendering recipe
     recipeView.render(model.state.recipe);
   } catch (err) {
-    // console.log(` ${err.message}`);
     recipeView.renderError();
   }
 };
@@ -31,20 +30,31 @@ const controlSearchResults = async function () {
     const query = searchView.getQuery();
     if (!query) return;
 
-    // 2. Load search
+    // 2. Load search results
     await model.loadSearchResults(query);
 
-    // 3. Render results
-    // resultsView.render(model.state.search.results);
+    // 3. Render initial results
     resultsView.render(model.getSearchResultsPage());
+
+    // 4. Render initial pagination buttons
+    paginationView.render(model.state.search);
   } catch (err) {
     console.log(err);
   }
 };
 
+const controlPagination = function (goToPage) {
+  // 1. Render NEW results
+  resultsView.render(model.getSearchResultsPage(goToPage));
+
+  // 2. Render NEW pagination buttons
+  paginationView.render(model.state.search);
+};
+
 const init = function () {
   recipeView.addHandlerRender(controlRecipes);
   searchView.addHandlerSearch(controlSearchResults);
+  paginationView.addHandlerClick(controlPagination); // Gọi hàm để xử lý sự kiện nút phân trang
 };
 
 init();
