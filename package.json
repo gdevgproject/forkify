@@ -1,24 +1,15 @@
 {
   "name": "forkify",
-  "version": "3.4.2",
+  "version": "1.0.0",
   "description": "Recipe application",
   "default": "index.html",
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html --dist-dir ./dist"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gdevgproject/forkify.git"
-  },
-  "author": "gdev.gproject - vuducminh",
+  "author": "Vu Duc Minh",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/gdevgproject/forkify/issues"
-  },
-  "homepage": "https://github.com/gdevgproject/forkify#readme",
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.13.2",
     "parcel": "^2.0.0-beta.1",
     "sass": "^1.26.10"
   },
