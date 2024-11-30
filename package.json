@@ -11,7 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "vite": "^4.0.0",
-    "sass": "^1.26.10"
+    "sass": "^1.26.10",
+    "parcel": "^2.0.0-beta.1"
   },
   "dependencies": {
     "core-js": "^3.6.5",
