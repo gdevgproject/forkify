@@ -1,7 +1,7 @@
 {
   "name": "forkify",
-  "version": "1.0.0",
-  "description": "recipe app",
+  "version": "3.4.2",
+  "description": "Recipe application",
   "default": "index.html",
   "scripts": {
     "start": "parcel index.html",
@@ -19,10 +19,12 @@
   "homepage": "https://github.com/gdevgproject/forkify#readme",
   "devDependencies": {
     "@parcel/transformer-sass": "^2.13.2",
-    "parcel": "^2.13.2",
-    "svgo": "^3.3.2"
+    "parcel": "^2.0.0-beta.1",
+    "sass": "^1.26.10"
   },
   "dependencies": {
-    "fractional": "^1.0.0"
+    "core-js": "^3.6.5",
+    "fractional": "^1.0.0",
+    "regenerator-runtime": "^0.13.7"
   }
 }
