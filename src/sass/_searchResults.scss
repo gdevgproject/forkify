@@ -12,6 +12,10 @@
 .pagination {
   margin-top: auto;
   padding: 0 3.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
 
   &::after {
     content: '';
@@ -26,6 +30,20 @@
     &--next {
       float: right;
     }
+  }
+
+  &__pages {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: $color-primary;
+    background-color: $color-grey-light-1;
+    padding: 0.8rem 1.2rem;
+    border-radius: 10rem;
+    min-width: 12rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
