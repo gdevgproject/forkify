@@ -4,7 +4,8 @@ import icons from 'url:../../img/icons.svg'; // Parcel 2
 
 class ResultsView extends View {
   _parentElement = document.querySelector('.results');
-  _errorMessage = 'No recipes found for your query! Please try again ;)';
+  _errorMessage =
+    'Không tìm thấy công thức nào cho truy vấn của bạn! Vui lòng thử lại ;)';
   _message = '';
 
   _generateMarkup() {

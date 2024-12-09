@@ -40,7 +40,7 @@ export const loadRecipe = async function (id) {
 
     console.log(state.recipe);
   } catch (err) {
-    // Temp error handling
+    // Xử lý lỗi tạm thời
     console.error(`${err} 💥💥💥💥`);
     throw err;
   }
@@ -92,21 +92,21 @@ const persistBookmarks = function () {
 };
 
 export const addBookmark = function (recipe) {
-  // Add bookmark
+  // Thêm đánh dấu
   state.bookmarks.push(recipe);
 
-  // Mark current recipe as bookmarked
+  // Đánh dấu công thức hiện tại là đã đánh dấu
   if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
 
   persistBookmarks();
 };
 
 export const deleteBookmark = function (id) {
-  // Delete bookmark
+  // Xóa đánh dấu
   const index = state.bookmarks.findIndex(el => el.id === id);
   state.bookmarks.splice(index, 1);
 
-  // Mark current recipe as NOT bookmarked
+  // Đánh dấu công thức hiện tại là chưa đánh dấu
   if (id === state.recipe.id) state.recipe.bookmarked = false;
 
   persistBookmarks();
@@ -132,7 +132,7 @@ export const uploadRecipe = async function (newRecipe) {
         // const ingArr = ing[1].replaceAll(' ', '').split(',');
         if (ingArr.length !== 3)
           throw new Error(
-            'Wrong ingredient fromat! Please use the correct format :)'
+            'Sai định dạng nguyên liệu! Vui lòng sử dụng đúng định dạng :)'
           );
 
         const [quantity, unit, description] = ingArr;

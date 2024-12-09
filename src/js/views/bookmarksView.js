@@ -4,7 +4,8 @@ import icons from 'url:../../img/icons.svg'; // Parcel 2
 
 class BookmarksView extends View {
   _parentElement = document.querySelector('.bookmarks__list');
-  _errorMessage = 'No bookmarks yet. Find a nice recipe and bookmark it ;)';
+  _errorMessage =
+    'Chưa có dấu trang nào. Hãy tìm một công thức hay và đánh dấu nó ;)';
   _message = '';
 
   addHandlerRender(handler) {

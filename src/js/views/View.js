@@ -4,13 +4,13 @@ export default class View {
   _data;
 
   /**
-   * Render the received object to the DOM
-   * @param {Object | Object[]} data The data to be rendered (e.g. recipe)
-   * @param {boolean} [render=true] If false, create markup string instead of rendering to the DOM
-   * @returns {undefined | string} A markup string is returned if render=false
-   * @this {Object} View instance
+   * Render đối tượng nhận được vào DOM
+   * @param {Object | Object[]} data Dữ liệu sẽ được render (ví dụ: công thức)
+   * @param {boolean} [render=true] Nếu false, tạo chuỗi markup thay vì render vào DOM
+   * @returns {undefined | string} Một chuỗi markup được trả về nếu render=false
+   * @this {Object} Thể hiện của View
    * @author Vu Duc Minh
-   * @todo Finish implementation
+   * @todo Hoàn thành việc triển khai
    */
   render(data, render = true) {
     if (!data || (Array.isArray(data) && data.length === 0))
@@ -37,7 +37,7 @@ export default class View {
       const curEl = curElements[i];
       // console.log(curEl, newEl.isEqualNode(curEl));
 
-      // Updates changed TEXT
+      // Cập nhật TEXT đã thay đổi
       if (
         !newEl.isEqualNode(curEl) &&
         newEl.firstChild?.nodeValue.trim() !== ''
@@ -46,7 +46,7 @@ export default class View {
         curEl.textContent = newEl.textContent;
       }
 
-      // Updates changed ATTRIBUES
+      // Cập nhật THUỘC TÍNH đã thay đổi
       if (!newEl.isEqualNode(curEl))
         Array.from(newEl.attributes).forEach(attr =>
           curEl.setAttribute(attr.name, attr.value)

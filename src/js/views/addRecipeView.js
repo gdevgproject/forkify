@@ -3,7 +3,7 @@ import icons from 'url:../../img/icons.svg'; // Parcel 2
 
 class AddRecipeView extends View {
   _parentElement = document.querySelector('.upload');
-  _message = 'Recipe was successfully uploaded :)';
+  _message = 'Công thức đã được tải lên thành công :)';
 
   _window = document.querySelector('.add-recipe-window');
   _overlay = document.querySelector('.overlay');
@@ -35,43 +35,43 @@ class AddRecipeView extends View {
     this._parentElement.addEventListener('input', e => {
       const input = e.target;
 
-      // Remove existing error message if any
+      // Xóa thông báo lỗi hiện có nếu có
       const existingError = input.parentElement.querySelector('.error-message');
       if (existingError) existingError.remove();
 
-      // Skip empty fields (except required ones)
+      // Bỏ qua các trường trống (ngoại trừ các trường bắt buộc)
       if (!input.value.trim() && !input.required) return;
 
       let errorMessage = '';
 
-      // Validate based on input name
+      // Xác thực dựa trên tên đầu vào
       switch (input.name) {
         case 'title':
           if (input.value.trim().length < 3) {
-            errorMessage = 'Title must be at least 3 characters long';
+            errorMessage = 'Tiêu đề phải dài ít nhất 3 ký tự';
           }
           break;
 
         case 'publisher':
           if (!input.value.trim()) {
-            errorMessage = 'Publisher is required';
+            errorMessage = 'Nhà xuất bản là bắt buộc';
           }
           break;
 
         case 'cookingTime':
           if (!input.value || input.value < 1) {
-            errorMessage = 'Preparation time must be at least 1 minute';
+            errorMessage = 'Thời gian chuẩn bị phải ít nhất 1 phút';
           }
           break;
 
         case 'servings':
           if (!input.value || input.value < 1) {
-            errorMessage = 'Servings must be at least 1';
+            errorMessage = 'Số khẩu phần phải ít nhất là 1';
           }
           break;
 
         default:
-          // Validate ingredients
+          // Xác thực nguyên liệu
           if (input.name?.startsWith('ingredient-')) {
             const inputValue = input.value.trim();
             if (!inputValue) return;
@@ -80,17 +80,17 @@ class AddRecipeView extends View {
 
             if (ingArr.length !== 3) {
               errorMessage =
-                'Wrong format! Please use: "Quantity,Unit,Description"';
+                'Sai định dạng! Vui lòng sử dụng: "Số lượng,Đơn vị,Mô tả"';
             } else {
               const [quantity] = ingArr;
               if (quantity && isNaN(quantity)) {
-                errorMessage = 'Quantity must be a number!';
+                errorMessage = 'Số lượng phải là một số!';
               }
             }
           }
       }
 
-      // Add error message if validation failed
+      // Thêm thông báo lỗi nếu xác thực không thành công
       if (errorMessage) {
         const errorElement = document.createElement('div');
         errorElement.className = 'error-message';
@@ -99,7 +99,7 @@ class AddRecipeView extends View {
       }
     });
 
-    // Validate at least one ingredient on form submit
+    // Xác thực ít nhất một nguyên liệu khi gửi biểu mẫu
     this._parentElement.addEventListener('submit', e => {
       const ingredients = Array.from(
         this._parentElement.querySelectorAll('[name^="ingredient-"]')
@@ -116,7 +116,7 @@ class AddRecipeView extends View {
 
         const errorElement = document.createElement('div');
         errorElement.className = 'error-message';
-        errorElement.textContent = 'At least one ingredient is required';
+        errorElement.textContent = 'Cần ít nhất một nguyên liệu';
         firstIngInput.parentElement.appendChild(errorElement);
       }
     });

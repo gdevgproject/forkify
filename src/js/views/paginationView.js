@@ -20,22 +20,22 @@ class PaginationView extends View {
       this._data.results.length / this._data.resultsPerPage
     );
 
-    // Page 1, and there are other pages
+    // Trang 1, và có các trang khác
     if (curPage === 1 && numPages > 1) {
       return `
         <button data-goto="${
           curPage + 1
         }" class="btn--inline pagination__btn--next">
-          <span>Page ${curPage + 1}</span>
+          <span>Trang ${curPage + 1}</span>
           <svg class="search__icon">
             <use href="${icons}#icon-arrow-right"></use>
           </svg>
         </button>
-        <span class="pagination__pages">Page ${curPage} of ${numPages}</span>
+        <span class="pagination__pages">Trang ${curPage} / ${numPages}</span>
       `;
     }
 
-    // Last page
+    // Trang cuối
     if (curPage === numPages && numPages > 1) {
       return `
         <button data-goto="${
@@ -44,13 +44,13 @@ class PaginationView extends View {
           <svg class="search__icon">
             <use href="${icons}#icon-arrow-left"></use>
           </svg>
-          <span>Page ${curPage - 1}</span>
+          <span>Trang ${curPage - 1}</span>
         </button>
-        <span class="pagination__pages">Page ${curPage} of ${numPages}</span>
+        <span class="pagination__pages">Trang ${curPage} / ${numPages}</span>
       `;
     }
 
-    // Other page
+    // Các trang khác
     if (curPage < numPages) {
       return `
         <button data-goto="${
@@ -59,13 +59,13 @@ class PaginationView extends View {
           <svg class="search__icon">
             <use href="${icons}#icon-arrow-left"></use>
           </svg>
-          <span>Page ${curPage - 1}</span>
+          <span>Trang ${curPage - 1}</span>
         </button>
-        <span class="pagination__pages">Page ${curPage} of ${numPages}</span>
+        <span class="pagination__pages">Trang ${curPage} / ${numPages}</span>
         <button data-goto="${
           curPage + 1
         }" class="btn--inline pagination__btn--next">
-          <span>Page ${curPage + 1}</span>
+          <span>Trang ${curPage + 1}</span>
           <svg class="search__icon">
             <use href="${icons}#icon-arrow-right"></use>
           </svg>
@@ -73,7 +73,7 @@ class PaginationView extends View {
       `;
     }
 
-    // Page 1, and there are NO other pages
+    // Trang 1, và KHÔNG có trang nào khác
     return '';
   }
 }

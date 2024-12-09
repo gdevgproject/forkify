@@ -6,7 +6,8 @@ import { Fraction } from 'fractional';
 
 class RecipeView extends View {
   _parentElement = document.querySelector('.recipe');
-  _errorMessage = 'We could not find that recipe. Please try another one!';
+  _errorMessage =
+    'Chúng tôi không thể tìm thấy công thức đó. Vui lòng thử một công thức khác!';
   _message = '';
 
   addHandlerRender(handler) {
@@ -49,7 +50,7 @@ class RecipeView extends View {
           <span class="recipe__info-data recipe__info-data--minutes">${
             this._data.cookingTime
           }</span>
-          <span class="recipe__info-text">minutes</span>
+          <span class="recipe__info-text">phút</span>
         </div>
         <div class="recipe__info">
           <svg class="recipe__info-icon">
@@ -58,7 +59,7 @@ class RecipeView extends View {
           <span class="recipe__info-data recipe__info-data--people">${
             this._data.servings
           }</span>
-          <span class="recipe__info-text">servings</span>
+          <span class="recipe__info-text">phần ăn</span>
 
           <div class="recipe__info-buttons">
             <button class="btn--tiny btn--update-servings" data-update-to="${
@@ -93,26 +94,25 @@ class RecipeView extends View {
       </div>
 
       <div class="recipe__ingredients">
-        <h2 class="heading--2">Recipe ingredients</h2>
+        <h2 class="heading--2">Nguyên liệu</h2>
         <ul class="recipe__ingredient-list">
           ${this._data.ingredients.map(this._generateMarkupIngredient).join('')}
       </div>
 
       <div class="recipe__directions">
-        <h2 class="heading--2">How to cook it</h2>
+        <h2 class="heading--2">Cách chế biến</h2>
         <p class="recipe__directions-text">
-          This recipe was carefully designed and tested by
+          Công thức này được thiết kế và thử nghiệm cẩn thận bởi
           <span class="recipe__publisher">${
             this._data.publisher
-          }</span>. Please check out
-          directions at their website.
+          }</span>. Vui lòng xem hướng dẫn chi tiết tại trang web của họ.
         </p>
         <a
           class="btn--small recipe__btn"
           href="${this._data.sourceUrl}"
           target="_blank"
         >
-          <span>Directions</span>
+          <span>Hướng dẫn</span>
           <svg class="search__icon">
             <use href="${icons}#icon-arrow-right"></use>
           </svg>
