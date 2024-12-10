@@ -48,7 +48,7 @@ class RecipeView extends View {
             <use href="${icons}#icon-clock"></use>
           </svg>
           <span class="recipe__info-data recipe__info-data--minutes">${
-            this._data.cookingTime
+            this._data.cookingTime || 'N/A' // Xử lý giá trị null/undefined
           }</span>
           <span class="recipe__info-text">phút</span>
         </div>
@@ -57,7 +57,7 @@ class RecipeView extends View {
             <use href="${icons}#icon-users"></use>
           </svg>
           <span class="recipe__info-data recipe__info-data--people">${
-            this._data.servings
+            this._data.servings || 'N/A' // Xử lý giá trị null/undefined
           }</span>
           <span class="recipe__info-text">phần ăn</span>
 
@@ -123,19 +123,19 @@ class RecipeView extends View {
 
   _generateMarkupIngredient(ing) {
     return `
-    <li class="recipe__ingredient">
-      <svg class="recipe__icon">
-        <use href="${icons}#icon-check"></use>
-      </svg>
-      <div class="recipe__quantity">${
-        ing.quantity ? new Fraction(ing.quantity).toString() : ''
-      }</div>
-      <div class="recipe__description">
-        <span class="recipe__unit">${ing.unit}</span>
-        ${ing.description}
-      </div>
-    </li>
-  `;
+      <li class="recipe__ingredient">
+        <svg class="recipe__icon">
+          <use href="${icons}#icon-check"></use>
+        </svg>
+        <div class="recipe__quantity">${
+          ing.quantity ? new Fraction(ing.quantity).toString() : ''
+        }</div>
+        <div class="recipe__description">
+          <span class="recipe__unit">${ing.unit}</span>
+          ${ing.description}
+        </div>
+      </li>
+    `;
   }
 }
 

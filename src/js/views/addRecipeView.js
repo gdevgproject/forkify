@@ -1,5 +1,5 @@
 import View from './View.js';
-import icons from 'url:../../img/icons.svg'; // Parcel 2
+import icons from 'url:../../img/icons.svg';
 
 class AddRecipeView extends View {
   _parentElement = document.querySelector('.upload');
@@ -20,6 +20,12 @@ class AddRecipeView extends View {
   toggleWindow() {
     this._overlay.classList.toggle('hidden');
     this._window.classList.toggle('hidden');
+
+    // Kiểm tra nếu form đang được đóng (overlay hidden)
+    if (this._overlay.classList.contains('hidden')) {
+      this._clearForm(); // Reset form
+      this._removeMessage(); // Xóa thông báo (nếu có)
+    }
   }
 
   _addHandlerShowWindow() {
@@ -32,94 +38,115 @@ class AddRecipeView extends View {
   }
 
   _addHandlerValidateInputs() {
-    this._parentElement.addEventListener('input', e => {
-      const input = e.target;
+    this._parentElement.addEventListener(
+      'blur',
+      e => {
+        const input = e.target;
+        if (!input.closest('.upload__column')) return;
+        this._validateInput(input);
+      },
+      true
+    );
 
-      // Xóa thông báo lỗi hiện có nếu có
-      const existingError = input.parentElement.querySelector('.error-message');
-      if (existingError) existingError.remove();
-
-      // Bỏ qua các trường trống (ngoại trừ các trường bắt buộc)
-      if (!input.value.trim() && !input.required) return;
-
-      let errorMessage = '';
-
-      // Xác thực dựa trên tên đầu vào
-      switch (input.name) {
-        case 'title':
-          if (input.value.trim().length < 3) {
-            errorMessage = 'Tiêu đề phải dài ít nhất 3 ký tự';
-          }
-          break;
-
-        case 'publisher':
-          if (!input.value.trim()) {
-            errorMessage = 'Nhà xuất bản là bắt buộc';
-          }
-          break;
-
-        case 'cookingTime':
-          if (!input.value || input.value < 1) {
-            errorMessage = 'Thời gian chuẩn bị phải ít nhất 1 phút';
-          }
-          break;
-
-        case 'servings':
-          if (!input.value || input.value < 1) {
-            errorMessage = 'Số khẩu phần phải ít nhất là 1';
-          }
-          break;
-
-        default:
-          // Xác thực nguyên liệu
-          if (input.name?.startsWith('ingredient-')) {
-            const inputValue = input.value.trim();
-            if (!inputValue) return;
-
-            const ingArr = inputValue.split(',').map(el => el.trim());
-
-            if (ingArr.length !== 3) {
-              errorMessage =
-                'Sai định dạng! Vui lòng sử dụng: "Số lượng,Đơn vị,Mô tả"';
-            } else {
-              const [quantity] = ingArr;
-              if (quantity && isNaN(quantity)) {
-                errorMessage = 'Số lượng phải là một số!';
-              }
-            }
-          }
-      }
-
-      // Thêm thông báo lỗi nếu xác thực không thành công
-      if (errorMessage) {
-        const errorElement = document.createElement('div');
-        errorElement.className = 'error-message';
-        errorElement.textContent = errorMessage;
-        input.parentElement.appendChild(errorElement);
-      }
-    });
-
-    // Xác thực ít nhất một nguyên liệu khi gửi biểu mẫu
     this._parentElement.addEventListener('submit', e => {
+      let isValid = true;
+
+      const inputs = Array.from(this._parentElement.querySelectorAll('input'));
+      inputs.forEach(input => {
+        if (!this._validateInput(input)) isValid = false;
+      });
+
       const ingredients = Array.from(
         this._parentElement.querySelectorAll('[name^="ingredient-"]')
       ).filter(input => input.value.trim());
 
       if (ingredients.length === 0) {
-        e.preventDefault();
+        isValid = false;
         const firstIngInput = this._parentElement.querySelector(
           '[name="ingredient-1"]'
         );
-        const existingError =
-          firstIngInput.parentElement.querySelector('.error-message');
-        if (existingError) existingError.remove();
-
-        const errorElement = document.createElement('div');
-        errorElement.className = 'error-message';
-        errorElement.textContent = 'Cần ít nhất một nguyên liệu';
-        firstIngInput.parentElement.appendChild(errorElement);
+        this._displayError(firstIngInput, 'Cần ít nhất một nguyên liệu');
+        firstIngInput.focus();
       }
+
+      if (!isValid) e.preventDefault();
     });
+  }
+
+  _validateInput(input) {
+    const existingError = input.parentElement.querySelector('.error-message');
+    if (existingError) existingError.remove();
+
+    if (!input.value.trim() && !input.required) return true;
+
+    let errorMessage = '';
+
+    switch (input.name) {
+      case 'title':
+        if (input.value.trim().length < 3) {
+          errorMessage = 'Tiêu đề phải dài ít nhất 3 ký tự';
+        }
+        break;
+
+      case 'publisher':
+        if (!input.value.trim()) {
+          errorMessage = 'Nhà xuất bản là bắt buộc';
+        }
+        break;
+
+      case 'cookingTime':
+        if (!input.value || isNaN(input.value) || input.value <= 0) {
+          errorMessage = 'Thời gian nấu phải là số lớn hơn 0';
+        }
+        break;
+
+      case 'servings':
+        if (!input.value || isNaN(input.value) || input.value <= 0) {
+          errorMessage = 'Số khẩu phần phải là số lớn hơn 0';
+        }
+        break;
+
+      default:
+        if (input.name?.startsWith('ingredient-')) {
+          const inputValue = input.value.trim();
+          if (!inputValue) break;
+
+          const ingArr = inputValue.split(',').map(el => el.trim());
+
+          if (ingArr.length !== 3) {
+            errorMessage =
+              'Sai định dạng! Vui lòng sử dụng: "Số lượng,Đơn vị,Mô tả"';
+          } else {
+            const [quantity, unit, description] = ingArr;
+            if (quantity && isNaN(quantity)) {
+              errorMessage = 'Số lượng phải là một số!';
+            }
+            if (quantity && Number(quantity) < 0) {
+              errorMessage = 'Số lượng không được âm!';
+            }
+            if (!unit) {
+              errorMessage = 'Đơn vị không được để trống!';
+            }
+            if (!description) {
+              errorMessage = 'Mô tả không được để trống!';
+            }
+          }
+        }
+    }
+
+    if (errorMessage) {
+      this._displayError(input, errorMessage);
+      return false;
+    }
+
+    return true;
+  }
+
+  _displayError(input, message) {
+    const errorElement = document.createElement('div');
+    errorElement.className = 'error-message';
+    errorElement.textContent = message;
+    input.parentElement.appendChild(errorElement);
   }
 
   addHandlerUpload(handler) {
@@ -129,6 +156,20 @@ class AddRecipeView extends View {
       const data = Object.fromEntries(dataArr);
       handler(data);
     });
+  }
+
+  _clearForm() {
+    const inputs = Array.from(this._parentElement.querySelectorAll('input'));
+    inputs.forEach(input => {
+      input.value = '';
+      const error = input.parentElement.querySelector('.error-message');
+      if (error) error.remove();
+    });
+  }
+
+  _removeMessage() {
+    const messageEl = this._parentElement.querySelector('.message');
+    if (messageEl) messageEl.remove();
   }
 
   _generateMarkup() {}

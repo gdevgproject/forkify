@@ -1,6 +1,5 @@
 import { async } from 'regenerator-runtime';
 import { API_URL, RES_PER_PAGE, KEY } from './config.js';
-// import { getJSON, sendJSON } from './helpers.js';
 import { AJAX } from './helpers.js';
 
 export const state = {
@@ -32,6 +31,10 @@ const createRecipeObject = function (data) {
 export const loadRecipe = async function (id) {
   try {
     const data = await AJAX(`${API_URL}${id}?key=${KEY}`);
+    // Xử lý trường hợp AJAX trả về null do lỗi
+    if (!data) {
+      throw new Error('Không thể tải công thức. Vui lòng thử lại!');
+    }
     state.recipe = createRecipeObject(data);
 
     if (state.bookmarks.some(bookmark => bookmark.id === id))
@@ -40,7 +43,7 @@ export const loadRecipe = async function (id) {
 
     console.log(state.recipe);
   } catch (err) {
-    // Xử lý lỗi tạm thời
+    // Xử lý lỗi và hiển thị cho người dùng
     console.error(`${err} 💥💥💥💥`);
     throw err;
   }
@@ -51,6 +54,10 @@ export const loadSearchResults = async function (query) {
     state.search.query = query;
 
     const data = await AJAX(`${API_URL}?search=${query}&key=${KEY}`);
+    // Xử lý trường hợp AJAX trả về null do lỗi
+    if (!data) {
+      throw new Error('Không thể tải kết quả tìm kiếm. Vui lòng thử lại!');
+    }
     console.log(data);
 
     state.search.results = data.data.recipes.map(rec => {
@@ -64,6 +71,7 @@ export const loadSearchResults = async function (query) {
     });
     state.search.page = 1;
   } catch (err) {
+    // Xử lý lỗi và hiển thị cho người dùng
     console.error(`${err} 💥💥💥💥`);
     throw err;
   }
@@ -125,20 +133,38 @@ const clearBookmarks = function () {
 
 export const uploadRecipe = async function (newRecipe) {
   try {
+    const invalidIngredients = [];
     const ingredients = Object.entries(newRecipe)
       .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
       .map(ing => {
         const ingArr = ing[1].split(',').map(el => el.trim());
-        // const ingArr = ing[1].replaceAll(' ', '').split(',');
-        if (ingArr.length !== 3)
-          throw new Error(
-            'Sai định dạng nguyên liệu! Vui lòng sử dụng đúng định dạng :)'
-          );
+        if (ingArr.length !== 3) {
+          invalidIngredients.push(ing[1]);
+          return null; // Bỏ qua nguyên liệu không hợp lệ
+        }
 
         const [quantity, unit, description] = ingArr;
 
-        return { quantity: quantity ? +quantity : null, unit, description };
-      });
+        // Kiểm tra kiểu dữ liệu và giá trị hợp lệ của quantity
+        const parsedQuantity = quantity ? +quantity : null;
+        if (parsedQuantity === null) {
+          invalidIngredients.push(ing[1]);
+          return null;
+        }
+
+        if (isNaN(parsedQuantity) || parsedQuantity < 0) {
+          invalidIngredients.push(ing[1]);
+          return null;
+        }
+
+        return { quantity: parsedQuantity, unit, description };
+      })
+      .filter(ing => ing !== null); // Lọc bỏ các nguyên liệu null (không hợp lệ)
+
+    if (invalidIngredients.length > 0) {
+      console.warn('Các nguyên liệu không hợp lệ:', invalidIngredients);
+      // Có thể hiển thị thông báo lỗi cho người dùng ở đây
+    }
 
     const recipe = {
       title: newRecipe.title,
@@ -151,6 +177,9 @@ export const uploadRecipe = async function (newRecipe) {
     };
 
     const data = await AJAX(`${API_URL}?key=${KEY}`, recipe);
+    if (!data) {
+      throw new Error('Không thể tải lên công thức. Vui lòng thử lại!');
+    }
     state.recipe = createRecipeObject(data);
     addBookmark(state.recipe);
   } catch (err) {

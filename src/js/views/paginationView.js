@@ -19,10 +19,32 @@ class PaginationView extends View {
     const numPages = Math.ceil(
       this._data.results.length / this._data.resultsPerPage
     );
+    const resultsStart = (curPage - 1) * this._data.resultsPerPage + 1;
+    const resultsEnd = Math.min(
+      curPage * this._data.resultsPerPage,
+      this._data.results.length
+    );
 
-    // Trang 1, và có các trang khác
+    // Tạo các nút first và last
+    const firstBtn = `
+        <button data-goto="1" class="btn--inline pagination__btn--first">
+            <span>Trang đầu</span>
+        </button>
+    `;
+
+    const lastBtn =
+      numPages > 1
+        ? `
+        <button data-goto="${numPages}" class="btn--inline pagination__btn--last">
+            <span>Trang cuối</span>
+        </button>
+    `
+        : '';
+
+    // Page 1, and there are other pages
     if (curPage === 1 && numPages > 1) {
       return `
+        ${lastBtn}
         <button data-goto="${
           curPage + 1
         }" class="btn--inline pagination__btn--next">
@@ -31,13 +53,16 @@ class PaginationView extends View {
             <use href="${icons}#icon-arrow-right"></use>
           </svg>
         </button>
-        <span class="pagination__pages">Trang ${curPage} / ${numPages}</span>
+        <span class="pagination__pages">Hiển thị ${resultsStart}-${resultsEnd} / ${
+        this._data.results.length
+      }</span>
       `;
     }
 
-    // Trang cuối
+    // Last page
     if (curPage === numPages && numPages > 1) {
       return `
+        ${firstBtn}
         <button data-goto="${
           curPage - 1
         }" class="btn--inline pagination__btn--prev">
@@ -46,13 +71,16 @@ class PaginationView extends View {
           </svg>
           <span>Trang ${curPage - 1}</span>
         </button>
-        <span class="pagination__pages">Trang ${curPage} / ${numPages}</span>
+        <span class="pagination__pages">Hiển thị ${resultsStart}-${resultsEnd} / ${
+        this._data.results.length
+      }</span>
       `;
     }
 
-    // Các trang khác
+    // Other page
     if (curPage < numPages) {
       return `
+        ${firstBtn}
         <button data-goto="${
           curPage - 1
         }" class="btn--inline pagination__btn--prev">
@@ -61,7 +89,7 @@ class PaginationView extends View {
           </svg>
           <span>Trang ${curPage - 1}</span>
         </button>
-        <span class="pagination__pages">Trang ${curPage} / ${numPages}</span>
+        
         <button data-goto="${
           curPage + 1
         }" class="btn--inline pagination__btn--next">
@@ -70,11 +98,15 @@ class PaginationView extends View {
             <use href="${icons}#icon-arrow-right"></use>
           </svg>
         </button>
+        ${lastBtn}
+        <span class="pagination__pages">Hiển thị ${resultsStart}-${resultsEnd} / ${
+        this._data.results.length
+      }</span>
       `;
     }
 
-    // Trang 1, và KHÔNG có trang nào khác
-    return '';
+    // Page 1, and there are NO other pages
+    return `<span class="pagination__pages">Hiển thị ${resultsStart}-${resultsEnd} / ${this._data.results.length}</span>`;
   }
 }
 
